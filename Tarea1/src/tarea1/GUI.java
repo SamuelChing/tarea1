@@ -46,6 +46,7 @@ public class GUI extends javax.swing.JFrame {
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment( JLabel.CENTER );
         tabla.setDefaultRenderer(String.class, centerRenderer);
+        btn_siguiente.setEnabled(false);
     }
 
     /**
@@ -372,6 +373,7 @@ public class GUI extends javax.swing.JFrame {
                 Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        btn_siguiente.setEnabled(true);
         contenido=archivo.resultado;
         String [][] listaDatos={};
         String titulosTablas[] = {"Indice","Operación","Regístro","Número"};
@@ -415,11 +417,19 @@ public class GUI extends javax.swing.JFrame {
             ir.setText("-");
             pc.setText("-");
         }
-       /* System.out.println(archivo.resultado.size());
-        System.out.println(archivo.resultadoExplicito.size());
-        System.out.println(contenido.size());*/
+      
         
     }//GEN-LAST:event_btnCargarArchivoActionPerformed
+    private void reinciar(){
+        archivo= new Logic();
+        index=0;
+        data.reinicio();
+        
+        actualizar();
+    }
+    /**
+     * Esta función realiza un actualización de los labels
+     */
     @SuppressWarnings("unchecked")
     private void actualizar(){
         ac.setText(data.getAc());
@@ -430,8 +440,9 @@ public class GUI extends javax.swing.JFrame {
     }
     @SuppressWarnings("unchecked")
     private void btn_siguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_siguienteActionPerformed
-       
+       //El siguiente indice es el último?
         if(index+1<contenido.size()){
+            //La instrucción es de largo 2?
             if(contenido.get(index).size()==2) {
                 
                 if(archivo.resultadoExplicito.get(index).get(0).equals("LOAD")){
@@ -444,13 +455,13 @@ public class GUI extends javax.swing.JFrame {
                     data.operacion(archivo.resultadoExplicito.get(index));
                 }
             }
-            else{
+            else{ //Si es de 3 o algo diferente, es una instrucción de MOV
                 
-                //ir.setText(contenido.get(index+1).get(0)+" "+contenido.get(index+1).get(1)+" "+contenido.get(index+1).get(2));
-                //pc.setText(String.valueOf(archivo.getPila().get(index+1)));
+                
                 
                 data.mov(archivo.resultadoExplicito.get(index));
             }
+            //Revisión de si existe otra instrucción para realizar cambios!
             if(contenido.get(index+1).size()==2){
                 ir.setText(contenido.get(index+1).get(0)+" "+contenido.get(index+1).get(1)+" 00000000");
                 pc.setText(String.valueOf(archivo.getPila().get(index+1)));
@@ -484,7 +495,11 @@ public class GUI extends javax.swing.JFrame {
             pc.setText("-");
             actualizar();
             JOptionPane.showMessageDialog(null, "Fin de las instrucciones, cargue un archivo");
-    
+            btn_siguiente.setEnabled(false);
+            DefaultTableModel model = (DefaultTableModel) tabla.getModel();
+            model.setRowCount(0);
+            tabla.setModel(model);
+            reinciar();
         }
         
         

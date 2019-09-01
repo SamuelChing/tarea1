@@ -21,7 +21,14 @@ public class Data {
         dx="0";
         ac="0";
     }
-
+    public void reinicio(){
+        this.ax="0";
+        this.bx="0";
+        this.cx="0";
+        this.dx="0";
+        this.ac="0";
+    }
+    //GETTERS
     public String getAx() {
         return ax;
     }
@@ -48,7 +55,10 @@ public class Data {
     }
 
    
-    
+    /**
+     * Realiza cambios por la instrucción "MOV"
+     * @param comandos, lista con comandos por revisar, el largo siempre será 3 
+     */
     public void mov(ArrayList<String> comandos){
         switch (comandos.get(1).toLowerCase()) {
             case "ax":
@@ -66,6 +76,10 @@ public class Data {
         }
         
     }
+    /**
+     * Realiza cambios por la instrucción "LOAD"
+     * @param comandos  lista con comandos por revisar, el largo siempre será 2 
+     */
     public void load(ArrayList<String> comandos){
         switch (comandos.get(1).toLowerCase()) {
             case "ax":
@@ -82,33 +96,45 @@ public class Data {
                 break;
         }
     }
+    /**
+     * Realiza cambios por la instrucción "STORE"
+     * @param comandos lista con comandos por revisar, el largo siempre será 2 
+     */
     public void store(ArrayList<String> comandos){
-        if(comandos.get(1).toLowerCase().equals("ax")){
-            this.ax=ac;
-        }
-        else if(comandos.get(1).toLowerCase().equals("bx")){
-            this.bx=ac;
-        }
-        else if(comandos.get(1).toLowerCase().equals("cx")){
-            this.cx=ac;
-        }
-        else{
-             this.dx=ac;
+        switch (comandos.get(1).toLowerCase()) {
+            case "ax":
+                this.ax=ac;
+                break;
+            case "bx":
+                this.bx=ac;
+                break;
+            case "cx":
+                this.cx=ac;
+                break;
+            default:
+                this.dx=ac;
+                break;
         }
     }
+    /**
+     * Esta función realiza cambios por las instrucciones de sumar y restar
+     * @param comandos, esta lista tiene un largo de 2
+     */
     public void operacion(ArrayList<String> comandos){
         String operando;
-        if(comandos.get(1).toLowerCase().equals("ax")){
-            operando=this.ax;
-        }
-        else if(comandos.get(1).toLowerCase().equals("bx")){
-            operando=this.bx;
-        }
-        else if(comandos.get(1).toLowerCase().equals("cx")){
-            operando=this.cx;
-        }
-        else{
-             operando=this.dx;
+        switch (comandos.get(1).toLowerCase()) {
+            case "ax":
+                operando=this.ax;
+                break;
+            case "bx":
+                operando=this.bx;
+                break;
+            case "cx":
+                operando=this.cx;
+                break;
+            default:
+                operando=this.dx;
+                break;
         }
         if(comandos.get(0).toLowerCase().equals("add")){
             this.ac=Integer.toString(Integer.parseInt(ac)+Integer.parseInt(operando));
